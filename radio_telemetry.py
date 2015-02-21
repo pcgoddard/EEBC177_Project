@@ -1,6 +1,12 @@
 #parse out time and date
 	#format: mm/dd/yyyy\s\hh:mm:ss
 	#split at space
+f1 = open('C2Q175P1_7_settings_v2_abcefgh.csv', 'r')
+f2 = open('C2Q175P1_7_settings_v2_abcefgh.tmp2.csv', 'w')
+for line in f1:
+    f2.write(line.replace(' ', ','))
+f1.close()
+f2.close()
 
 #highlight files with full 24 hours of continuous recording
 	#in column A, "ElapsedTime", if time interval is 20s, do nothing

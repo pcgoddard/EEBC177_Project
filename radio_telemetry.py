@@ -1,12 +1,15 @@
+#!/usr/bin/env ipython
+
 #parse out time and date
-	#format: mm/dd/yyyy\s\hh:mm:ss
-	#split at space
-f1 = open('C2Q175P1_7_settings_v2_abcefgh.csv', 'r')
-f2 = open('C2Q175P1_7_settings_v2_abcefgh.tmp2.csv', 'w')
-for line in f1:
-    f2.write(line.replace(' ', ','))
-f1.close()
-f2.close()
+f1 = open('file.csv').read() #opens original as string 'f1'
+f2 = open('parsed_file.csv', 'w') #creates new file to write the parsed data to via file object 'f2'
+reps = {' ':',', '/':'_', 'RealTime':'Date', 'Event':'Realtime'} 
+#entry 0: split date and time; replace the space with comma delimiter
+#entry 1: replace / in date with _
+#entries 2,3: adjust column headers
+f1Parsed = replace_all(f1, reps) #creates string with edited f1 data
+f2.write(f1Parsed) #writes parsed data to file stored in f2
+f2.close() #closes file object
 
 #highlight files with full 24 hours of continuous recording
 	#in column A, "ElapsedTime", if time interval is 20s, do nothing

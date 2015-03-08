@@ -17,7 +17,7 @@ f2.write(f1parsed) #writes parsed data to file stored in f2
 f2.close() #closes file object
 
 ##noise filtering on temperature data##
-	#in column 9 (J), if the difference between numerical lines is less than -0.2 or greater than 0.2, remove line
+	#in column 10 (K), if the difference between numerical lines is less than -0.2 or greater than 0.2, remove line
 f2 = open("parsed_C2Q175P1_7_abcefgh.csv")
 f3 = open("filtered_parsed_C2Q175P1_7_abcefgh.csv", "w")
 f3.write("ElapsedTime,Date,Realtime, , ,I1Num,I1RR-I,I1RR-I(SD),I1HR,I1HR(SD),I2T_Mean,I2T_Mean(SD),I3A_TA,I3A_TA(SD)\r\n") #adds corrected header

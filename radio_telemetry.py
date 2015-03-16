@@ -34,7 +34,8 @@ def filter_temp(FILE): #UPDATE SAVED TO RELEVENT VALUE# #remove temperature read
     for line in f2: #iterate line by line
         fields = line.split(",") #define fields as comma delimited
         if abs(float(fields[10]) - saved) > 0.30: #if the difference from row_n to row_m is > 0.3, mark row_m as outlier and do not extract
-            print "outlier" #so we can see output
+            f3.write(fields[0])
+            f3.write('\n') #for outlier, write time marker to maintain consistency across files for comparability
         else:
             f3.write(line) #write the lines with accurate data to new file
         saved = float(fields[10]) #update 'saved' value to last non-outlier body temp for each new line

@@ -22,6 +22,7 @@ def parse_data(FILE): #separate time and date, correct header
     f1parsed = replace_all(f1, reps) #creates string with edited f1 data
     f2.write(f1parsed) #writes parsed data to file stored in f2
     f2.close() #closes file object
+    print ('Parsed data has been written to new file.')
 
 ##FILTER TEMPERATURE DATA##
 #in column 10 (K), if the difference between numerical lines is less than -0.3 or greater than 0.3, remove line
@@ -41,6 +42,7 @@ def filter_temp(FILE): #UPDATE SAVED TO RELEVENT VALUE# #remove temperature read
         saved = float(fields[10]) #update 'saved' value to last non-outlier body temp for each new line
     f2.close() #close file objects
     f3.close()
+    print ('Data with filtered body temp has been extraced to new file.')
 
 ##CONDITIONAL: EXTRACT ACTIVE/REST DATA##
 #active HR:
@@ -58,6 +60,7 @@ def activeHR(FILE): #extract lines with activity between 3 and 4 units
             f4.write('\n') #keep 'ElapsedTime' marker for consistency
     f3.close() #close file objects
     f4.close()
+    print ('Active telemetry data has been extracted.')
 	
 #resting HR: 
 def restHR(FILE): #extract lines with activity = 0 after 1 full minute of rest
@@ -79,6 +82,7 @@ def restHR(FILE): #extract lines with activity = 0 after 1 full minute of rest
             f5.write('\n') ##keep 'ElapsedTime' marker for consistency
     f3.close() #close files
     f5.close()
+    print ('Resting telemetry data has been extracted.')
 
 ##COMPILE FILTERED DATA FOR EACH MOUSE##
 #7a, 8a, 9a, etc. into one file for analysis

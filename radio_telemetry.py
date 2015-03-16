@@ -72,8 +72,11 @@ def restHR(FILE): #extract lines with activity = 0 after 1 full minute of rest
             counts = counts + 1 #if mouse has no activity, add to counts
         else:
             counts == 0 #if there is activity, reset counter to 0
-        if counts > 2 and float(fields[12]) == 0:
-            f5.write(line) #if counts is greater than 2, there are at least 3 preceding lines (1 minute) of no activity; write the current line to resting HR document
+        if counts >= 3 and float(fields[12]) == 0:
+            f5.write(line) #if 'counts' indicate at least 3 preceding lines (1 minute) of no activity; write  current line to resting heart rate file
+        else:
+            f5.write(fields[0])
+            f5.write('\n') ##keep 'ElapsedTime' marker for consistency
     f3.close() #close files
     f5.close()
 

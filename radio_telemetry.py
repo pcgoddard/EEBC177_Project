@@ -53,6 +53,9 @@ def activeHR(FILE): #extract lines with activity between 3 and 4 units
         fields = line.split(",") #define field delimiter
         if float(fields[12]) >= 3 and float(fields[12]) <= 4:
             f4.write(line) #if activity value in column 12 (M) is between 3 and 4 units, write line to new file
+        else:
+            f4.write(fields[0])
+            f4.write('\n') #keep 'ElapsedTime' marker for consistency
     f3.close() #close file objects
     f4.close()
 	

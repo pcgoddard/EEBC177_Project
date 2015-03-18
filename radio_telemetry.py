@@ -52,7 +52,7 @@ def filter_temp(FILE): #UPDATE SAVED TO RELEVENT VALUE# #remove temperature read
 ##CONDITIONAL: EXTRACT ACTIVE/REST DATA##
 #active HR:
 def activeHR(FILE): #extract data for activity between 3 and 4 units
-    f3 = open("filtered_parsed_2" + FILE + ".csv") #open filtered data file
+    f3 = open("filtered_parsed_" + FILE + ".csv") #open filtered data file
     f3.readline() #skip header
     f4 = open("activeHR_" + FILE + ".csv", "w") #open new file for active telemetry data
     f4.write("ElapsedTime,Date,Realtime, , ,I1Num,I1RR-I,I1RR-I(SD),I1HR,I1HR(SD),I2T_Mean,I2T_Mean(SD),I3A_TA,I3A_TA(SD)\r\n") #write in header
@@ -62,21 +62,21 @@ def activeHR(FILE): #extract data for activity between 3 and 4 units
             if float(fields[12]) >= 3 and float(fields[12]) <= 4 #if activity data measures between 3 and 4 units, extract all data in line
                 f4.write(line)
             else: #otherwise, extract "time holder fields:" [0]elapsed time, [1]date, and [1]realtime markers and blank row
-                f4.write(fields[0]) #write elapsed time
+                f4.write(fields[0]) #extract elapsed time
                 f4.write(",") #set up new field
-                f4.write(fields[1]) #write date
+                f4.write(fields[1]) #extract date
                 f4.write(",") #set up new field
-                f4.write(fields[2]) #write real time
+                f4.write(fields[2]) #extract real time
                 f4.write(",,,,,,,,,,,,,") #write blank fields for rest of row
                 f4.write('\n') #start next iteration on a new line
         except ValueError, e: #when iteration hits blank field from temperature filtering, ignore the error; write time holder fields and continue iteration
-                f4.write(fields[0]) #write elapsed time
-                f4.write(",") #set up new field
-                f4.write(fields[1]) #write date
-                f4.write(",") #set up new field
-                f4.write(fields[2]) #write real time
-                f4.write(",,,,,,,,,,,,,") #write blank fields for rest of row
-                f4.write('\n') #start next iteration on a new line
+            f4.write(fields[0]) #extract elapsed time
+            f4.write(",") #set up new field
+            f4.write(fields[1]) #extract date
+            f4.write(",") #set up new field
+            f4.write(fields[2]) #extract real time
+            f4.write(",,,,,,,,,,,,,") #write blank fields for rest of row
+            f4.write('\n') #start next iteration on a new line
             continue
     f3.close() #close file objects
     f4.close()

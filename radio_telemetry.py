@@ -83,26 +83,42 @@ def activeHR(FILE): #extract data for activity between 3 and 4 units
     print ('Active telemetry data has been extracted.') #when done, print completion statement
 	
 #resting HR: 
+#resting HR: 
 def restHR(FILE): #extract lines with activity = 0 after 1 full minute of rest
-    f3 = open("filtered_parsed_ " + FILE + ".csv") #open filtered data
+    f3 = open("filtered_parsed_3" + FILE + ".csv") #open filtered data
     f3.readline() #skip header in for_loop
-    f5 = open("restHR_ " + FILE + ".csv", "w") #open new file for extracted 'resting' data
+    f5 = open("restHR_" + FILE + ".csv", "w") #open new file for extracted 'resting' data
     f5.write("ElapsedTime,Date,Realtime, , ,I1Num,I1RR-I,I1RR-I(SD),I1HR,I1HR(SD),I2T_Mean,I2T_Mean(SD),I3A_TA,I3A_TA(SD)\r\n") #insert header into new file
     counts = 0 #set up counter; set counter to 0
     for line in f3: #iterate line by line
         fields = line.split(",") #define field delimiter as comma
-        if float(fields[12]) == 0: 
-            counts = counts + 1 #if mouse has no activity, add to counts
-        else:
-            counts == 0 #if there is activity, reset counter to 0
-        if counts >= 3 and float(fields[12]) == 0:
-            f5.write(line) #if 'counts' indicate at least 3 preceding lines (1 minute) of no activity; write  current line to resting heart rate file
-        else:
+        try:
+            if float(fields[12]) == 0: #if mouse has no activity, add to counts
+                counts = counts + 1 
+            else: #if there is activity, reset counter to 0
+                counts == 0 
+            if counts >= 3 and float(fields[12]) == 0: #if activity is 0 after at least one full minute of rest, extract line
+                f5.write(line)
+            else: #extract time place-holder data and write blank fields
+                f5.write(fields[0])
+                f5.write(",")
+                f5.write(fields[1])
+                f5.write(",")
+                f5.write(fields[2])
+                f5.write(",,,,,,,,,,,,,")
+                f5.write('\n')
+        except ValueError, e: #when iteration hits blank field from temperature filtering, ignore the error; write time place-holder fields and continue iteration
             f5.write(fields[0])
-            f5.write('\n') ##keep 'ElapsedTime' marker for consistency
+            f5.write(",")
+            f5.write(fields[1])
+            f5.write(",")
+            f5.write(fields[2])
+            f5.write(",,,,,,,,,,,,,")
+            f5.write('\n')
+            continue
     f3.close() #close files
     f5.close()
-    print ('Resting telemetry data has been extracted.')
+    print ('Resting telemetry data has been extracted.') #when done, print completion statement
 
 ##COMPILE FILTERED DATA FOR EACH MOUSE##
 #7a, 8a, 9a, etc. into one file for analysis

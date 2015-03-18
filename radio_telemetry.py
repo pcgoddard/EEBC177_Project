@@ -27,40 +27,60 @@ def parse_data(FILE): #separate time and date, correct header
 ##FILTER TEMPERATURE DATA##
 #in column 10 (K), if the difference between numerical lines is less than -0.3 or greater than 0.3, remove line
 def filter_temp(FILE): #UPDATE SAVED TO RELEVENT VALUE# #remove temperature readings outside threshold deviation
-    f2 = open("parsed_ " + FILE + ".csv") #open newly parsed data
-    f3 = open("filtered_parsed_ " + FILE + ".csv", "w") #open new file for filtered data
+    f2 = open("parsed_" + FILE + ".csv") #open newly parsed data#
+    f3 = open("filtered_parsed_3" + FILE + ".csv", "w") #open new file for filtered data#
     f3.write("ElapsedTime,Date,Realtime, , ,I1Num,I1RR-I,I1RR-I(SD),I1HR,I1HR(SD),I2T_Mean,I2T_Mean(SD),I3A_TA,I3A_TA(SD)\r\n") #adds corrected header
     saved = 36.23 #whatever first value in row is; update to each next good value
     f2.readline() #skip first line in f2
     for line in f2: #iterate line by line
         fields = line.split(",") #define fields as comma delimited
-        if abs(float(fields[10]) - saved) > 0.30: #if the difference from row_n to row_m is > 0.3, mark row_m as outlier and do not extract
-            f3.write(fields[0])
-            f3.write('\n') #for outlier, write time marker to maintain consistency across files for comparability
+        if abs(float(fields[10]) - saved) > 0.30: #if the difference from row_n to row_m is > 0.3, mark row_m as outlier and do not extract data
+            f3.write(fields[0]) #extract 'elapsed time' data
+            f3.write(",") #set up next field
+            f3.write(fields[1]) #extract 'date' data
+            f3.write(",") #set up next field
+            f3.write(fields[2]) #extract 'real time' data
+            f3.write(",,,,,,,,,,,,,") #write blank fields for rest of line
+            f3.write('\n') #create new line for next set of data
         else:
-            f3.write(line) #write the lines with accurate data to new file
+            f3.write(line) #for lines with accurate temp readings, extract all data
         saved = float(fields[10]) #update 'saved' value to last non-outlier body temp for each new line
     f2.close() #close file objects
     f3.close()
-    print ('Data with filtered body temp has been extraced to new file.')
+    print ('Data with filtered body temp has been extraced to new file.') #when done, print completion statement
 
 ##CONDITIONAL: EXTRACT ACTIVE/REST DATA##
 #active HR:
-def activeHR(FILE): #extract lines with activity between 3 and 4 units
-    f3 = open("filtered_parsed_ " + FILE + ".csv") #open filtered data
-    f3.readline() #skip header in for_loop
-    f4 = open("activeHR_ " + FILE + ".csv", "w") #open new file for extracted 'active' data
-    f4.write("ElapsedTime,Date,Realtime, , ,I1Num,I1RR-I,I1RR-I(SD),I1HR,I1HR(SD),I2T_Mean,I2T_Mean(SD),I3A_TA,I3A_TA(SD)\r\n") #write in corrected header
-    for line in f3:
-        fields = line.split(",") #define field delimiter
-        if float(fields[12]) >= 3 and float(fields[12]) <= 4:
-            f4.write(line) #if activity value in column 12 (M) is between 3 and 4 units, write line to new file
-        else:
-            f4.write(fields[0])
-            f4.write('\n') #keep 'ElapsedTime' marker for consistency
+def activeHR(FILE): #extract data for activity between 3 and 4 units
+    f3 = open("filtered_parsed_2" + FILE + ".csv") #open filtered data file
+    f3.readline() #skip header
+    f4 = open("activeHR_" + FILE + ".csv", "w") #open new file for active telemetry data
+    f4.write("ElapsedTime,Date,Realtime, , ,I1Num,I1RR-I,I1RR-I(SD),I1HR,I1HR(SD),I2T_Mean,I2T_Mean(SD),I3A_TA,I3A_TA(SD)\r\n") #write in header
+    for line in f3: #iterate over filtered data
+        fields = line.split(",") #set comma delimiter
+        try:
+            if float(fields[12]) >= 3 and float(fields[12]) <= 4 #if activity data measures between 3 and 4 units, extract all data in line
+                f4.write(line)
+            else: #otherwise, extract "time holder fields:" [0]elapsed time, [1]date, and [1]realtime markers and blank row
+                f4.write(fields[0]) #write elapsed time
+                f4.write(",") #set up new field
+                f4.write(fields[1]) #write date
+                f4.write(",") #set up new field
+                f4.write(fields[2]) #write real time
+                f4.write(",,,,,,,,,,,,,") #write blank fields for rest of row
+                f4.write('\n') #start next iteration on a new line
+        except ValueError, e: #when iteration hits blank field from temperature filtering, ignore the error; write time holder fields and continue iteration
+                f4.write(fields[0]) #write elapsed time
+                f4.write(",") #set up new field
+                f4.write(fields[1]) #write date
+                f4.write(",") #set up new field
+                f4.write(fields[2]) #write real time
+                f4.write(",,,,,,,,,,,,,") #write blank fields for rest of row
+                f4.write('\n') #start next iteration on a new line
+            continue
     f3.close() #close file objects
     f4.close()
-    print ('Active telemetry data has been extracted.')
+    print ('Active telemetry data has been extracted.') #when done, print completion statement
 	
 #resting HR: 
 def restHR(FILE): #extract lines with activity = 0 after 1 full minute of rest

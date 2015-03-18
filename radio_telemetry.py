@@ -28,7 +28,7 @@ def parse_data(FILE): #separate time and date, correct header
 #in column 10 (K), if the difference between numerical lines is less than -0.3 or greater than 0.3, remove line
 def filter_temp(FILE): #UPDATE SAVED TO RELEVENT VALUE# #remove temperature readings outside threshold deviation
     f2 = open("parsed_" + FILE + ".csv") #open newly parsed data#
-    f3 = open("filtered_parsed_3" + FILE + ".csv", "w") #open new file for filtered data#
+    f3 = open("filtered_parsed_" + FILE + ".csv", "w") #open new file for filtered data#
     f3.write("ElapsedTime,Date,Realtime, , ,I1Num,I1RR-I,I1RR-I(SD),I1HR,I1HR(SD),I2T_Mean,I2T_Mean(SD),I3A_TA,I3A_TA(SD)\r\n") #adds corrected header
     saved = 36.23 #whatever first value in row is; update to each next good value
     f2.readline() #skip first line in f2

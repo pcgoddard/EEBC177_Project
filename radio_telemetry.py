@@ -85,7 +85,7 @@ def activeHR(FILE): #extract data for activity between 3 and 4 units
 #resting HR: 
 #resting HR: 
 def restHR(FILE): #extract lines with activity = 0 after 1 full minute of rest
-    f3 = open("filtered_parsed_3" + FILE + ".csv") #open filtered data
+    f3 = open("filtered_parsed_" + FILE + ".csv") #open filtered data
     f3.readline() #skip header in for_loop
     f5 = open("restHR_" + FILE + ".csv", "w") #open new file for extracted 'resting' data
     f5.write("ElapsedTime,Date,Realtime, , ,I1Num,I1RR-I,I1RR-I(SD),I1HR,I1HR(SD),I2T_Mean,I2T_Mean(SD),I3A_TA,I3A_TA(SD)\r\n") #insert header into new file

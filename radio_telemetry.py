@@ -1,6 +1,6 @@
 #!/usr/bin/env ipython
 
-#Code assumes that the raw csv data (extracted sheet by sheet for each mouse: abc(d)efgh) is titled like: C2Q175P1_7a.csv where '7' refers to the trial day and 'a' is the specific mouse
+#Code assumes that the raw csv data (extracted sheet by sheet for each mouse: abcdefgh) is titled like: C2Q175P1_7a.csv where '7' refers to the trial day and 'a' is the specific mouse
 
 #to use this code, replace FILE with 'C2Q175P1_7a' (or respective file name)
 
@@ -14,7 +14,7 @@ def replace_all(text, dic): #enter text and dictionary of replacements into func
 def parse_data(FILE): #separate time and date, correct header
     f1 = open("" + FILE + ".csv").read() #opens original csv file as string 'f1'
     f2 = open("parsed_ " + FILE + ".csv", "w") #creates new file to write the parsed data to via file object 'f2'
-											   #new file will read: parsed_FILE.csv
+						#new file will read: parsed_FILE.csv
     reps = {' ':',', '/':'_', 'RealTime':'Date', 'Event':'Realtime'} #dictionary of desired replacements
 	    #entry 0: split date and time; replace the space with comma delimiter
 	    #entry 1: replace / in date with _
@@ -120,5 +120,3 @@ def restHR(FILE): #extract lines with activity = 0 after 1 full minute of rest
     f5.close()
     print ('Resting telemetry data has been extracted.') #when done, print completion statement
 
-##COMPILE FILTERED DATA FOR EACH MOUSE##
-#7a, 8a, 9a, etc. into one file for analysis
